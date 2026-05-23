@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MindVault AI</title>
+  <link rel="stylesheet" href="popup.css">
+  <!-- Chart.js for analytics charts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+</head>
+<body>
+
+<!-- ── Header ───────────────────────────────────────────────────── -->
+<header class="header">
+  <div class="logo">
+    <span class="logo-icon">🧠</span>
+    <span class="logo-text">MindVault <span class="ai-badge">AI</span></span>
+  </div>
+  <div class="header-actions">
+    <button class="icon-btn" id="btn-search-toggle" title="Search memory (AI)">🔍</button>
+    <button class="icon-btn" id="btn-pin-current"   title="Pin current page">📌</button>
+    <button class="icon-btn" id="btn-options"        title="Settings">⚙️</button>
+  </div>
+</header>
+
+<!-- ── AI Search Bar (hidden by default) ───────────────────────── -->
+<div class="search-bar" id="search-bar" style="display:none">
+  <div class="search-inner">
+    <span class="search-icon">✨</span>
+    <input id="search-input" type="text"
+           placeholder="e.g. React article from yesterday…"
+           autocomplete="off" spellcheck="false">
+    <button id="btn-search-clear" class="search-clear">✕</button>
+  </div>
+  <div id="search-results" class="search-results"></div>
+</div>
+
+<!-- ── Tab Navigation ───────────────────────────────────────────── -->
+<nav class="tab-nav">
+  <button class="tab-btn active" data-tab="memory">
+    <span>🗃️</span> Memory
+  </button>
+  <button class="tab-btn" data-tab="focus">
+    <span>🎯</span> Focus
+  </button>
+  <button class="tab-btn" data-tab="insights">
+    <span>📊</span> Insights
+  </button>
+</nav>
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!-- TAB: MEMORY                                                    -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div class="tab-panel active" id="tab-memory">
+
+  <!-- Filter pills -->
+  <div class="filter-row">
+    <button class="pill active" data-filter="all">All</button>
+    <button class="pill" data-filter="pinned">📌 Pinned</button>
+    <button class="pill" data-filter="today">Today</button>
+    <button class="pill" data-filter="Tech">💻</button>
+    <button class="pill" data-filter="Social">📱</button>
+    <button class="pill" data-filter="Education">📚</button>
+    <button class="pill" data-filter="Entertainment">🎬</button>
+  </div>
+
+  <!-- Visit list -->
+  <div class="visit-list" id="visit-list">
+    <div class="empty-state" id="empty-state">
+      <div class="empty-icon">🧠</div>
+      <p>No memories yet.<br>Start browsing and MindVault<br>will remember everything!</p>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!-- TAB: FOCUS                                                     -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-focus">
+
+  <!-- Focus score ring -->
+  <div class="focus-hero">
+    <div class="score-ring-wrap">
+      <svg class="score-ring" viewBox="0 0 120 120">
+        <circle class="ring-bg"  cx="60" cy="60" r="50"/>
+        <circle class="ring-fill" id="ring-fill" cx="60" cy="60" r="50"
+                stroke-dasharray="314" stroke-dashoffset="314"/>
+      </svg>
+      <div class="score-center">
+        <span class="score-num"  id="score-num">–</span>
+        <span class="score-label" id="score-label">Loading…</span>
+      </div>
+    </div>
+    <div class="focus-meta">
+      <div class="meta-item">
+        <span class="meta-icon">⏱️</span>
+        <div>
+          <span class="meta-val" id="focus-time">–</span>
+          <span class="meta-key">Active Time</span>
+        </div>
+      </div>
+      <div class="meta-item">
+        <span class="meta-icon">🔀</span>
+        <div>
+          <span class="meta-val" id="focus-switches">–</span>
+          <span class="meta-key">Tab Switches</span>
+        </div>
+      </div>
+      <div class="meta-item">
+        <span class="meta-icon">📜</span>
+        <div>
+          <span class="meta-val" id="focus-doom">–</span>
+          <span class="meta-key">Doomscrolls</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Today's top sites -->
+  <div class="section-title">Today's Top Sites</div>
+  <div class="site-list" id="top-sites-list">
+    <div class="loading-row">Loading…</div>
+  </div>
+
+  <!-- Category donut chart -->
+  <div class="section-title">Time by Category</div>
+  <div class="chart-wrap small">
+    <canvas id="cat-chart"></canvas>
+    <div id="cat-legend" class="cat-legend"></div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!-- TAB: INSIGHTS                                                  -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-insights">
+
+  <!-- AI Insight card -->
+  <div class="insight-card" id="insight-card">
+    <div class="insight-header">
+      <span>✨ AI Daily Insight</span>
+      <button class="icon-btn small" id="btn-gen-insight">Refresh</button>
+    </div>
+    <p class="insight-text" id="insight-text">
+      Click <strong>Refresh</strong> to generate your personalised daily insight
+      (requires API key in Settings).
+    </p>
+  </div>
+
+  <!-- Weekly score chart -->
+  <div class="section-title">7-Day Focus Score</div>
+  <div class="chart-wrap">
+    <canvas id="week-score-chart"></canvas>
+  </div>
+
+  <!-- Weekly time chart -->
+  <div class="section-title">Daily Browse Time (hrs)</div>
+  <div class="chart-wrap">
+    <canvas id="week-time-chart"></canvas>
+  </div>
+
+  <!-- Top sites this week -->
+  <div class="section-title">Top Sites This Week</div>
+  <div class="site-list" id="week-sites-list">
+    <div class="loading-row">Loading…</div>
+  </div>
+
+  <!-- Export / Clear -->
+  <div class="action-row">
+    <button class="btn-secondary" id="btn-export">⬇️ Export Data</button>
+    <button class="btn-danger"    id="btn-clear">🗑️ Clear History</button>
+  </div>
+
+</div>
+
+<!-- ── Toast notification ────────────────────────────────────────── -->
+<div class="toast" id="toast"></div>
+
+<!-- ── Visit detail modal ─────────────────────────────────────────── -->
+<div class="modal-overlay" id="modal-overlay" style="display:none">
+  <div class="modal">
+    <div class="modal-header">
+      <img id="modal-favicon" src="" alt="" class="modal-favicon">
+      <div class="modal-title-wrap">
+        <h3 id="modal-title"></h3>
+        <a id="modal-url" href="#" target="_blank" class="modal-url"></a>
+      </div>
+      <button class="icon-btn" id="modal-close">✕</button>
+    </div>
+    <div class="modal-badges">
+      <span class="badge" id="modal-cat"></span>
+      <span class="badge grey" id="modal-time"></span>
+      <span class="badge grey" id="modal-ts"></span>
+    </div>
+    <div class="modal-summary" id="modal-summary">
+      <p class="muted">No summary yet.</p>
+    </div>
+    <div class="modal-keypoints" id="modal-keypoints"></div>
+    <div class="modal-actions">
+      <button class="btn-ai" id="modal-btn-summarise">✨ AI Summarise</button>
+      <button class="btn-secondary" id="modal-btn-pin">📌 Pin</button>
+      <button class="btn-danger"    id="modal-btn-delete">🗑️ Delete</button>
+    </div>
+    <div class="modal-ai-status" id="modal-ai-status"></div>
+  </div>
+</div>
+
+<script type="module" src="popup.js"></script>
+</body>
+</html>
