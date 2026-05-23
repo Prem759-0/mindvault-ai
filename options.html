@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MindVault AI — Settings</title>
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <span>🧠</span>
+    <span>MindVault <em>AI</em></span>
+  </div>
+  <nav class="sidebar-nav">
+    <a class="nav-link active" data-section="general">⚙️ General</a>
+    <a class="nav-link" data-section="ai">✨ AI Settings</a>
+    <a class="nav-link" data-section="privacy">🔒 Privacy</a>
+    <a class="nav-link" data-section="shortcuts">⌨️ Shortcuts</a>
+    <a class="nav-link" data-section="about">ℹ️ About</a>
+  </nav>
+  <div class="sidebar-footer">
+    <span>v1.0.0</span>
+    <a href="https://github.com" target="_blank">GitHub</a>
+  </div>
+</aside>
+
+<main class="content">
+
+  <!-- ── GENERAL ────────────────────────────────── -->
+  <section class="section active" id="section-general">
+    <h2>General Settings</h2>
+
+    <div class="card">
+      <div class="card-title">Tracking</div>
+
+      <div class="field-row">
+        <div class="field-info">
+          <label>Enable Page Tracking</label>
+          <p>Automatically save visited pages to memory</p>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="opt-tracking" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="field-row">
+        <div class="field-info">
+          <label>Auto-Save Favicon</label>
+          <p>Store page icons for visual recognition</p>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="opt-favicon" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="field-row">
+        <div class="field-info">
+          <label>Track Time Spent</label>
+          <p>Measure time per site for focus analytics</p>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="opt-timespent" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Notifications</div>
+
+      <div class="field-row">
+        <div class="field-info">
+          <label>Enable Notifications</label>
+          <p>Alerts for doomscrolling, focus tips, daily reports</p>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="opt-notifications" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="field-row">
+        <div class="field-info">
+          <label>Daily Focus Report</label>
+          <p>Receive a summary notification each evening at 11pm</p>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="opt-daily-report" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="field-row">
+        <div class="field-info">
+          <label>Doomscroll Alerts</label>
+          <p>Notify when excessive scrolling detected</p>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="opt-doomscroll-alert" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Memory Storage</div>
+
+      <div class="field-row">
+        <div class="field-info">
+          <label>Max History Items</label>
+          <p>How many pages to remember (1,000 – 10,000)</p>
+        </div>
+        <div class="field-control">
+          <input type="number" id="opt-max-items" min="1000" max="10000" step="500" value="5000" class="num-input">
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field-info">
+          <label>Ignore Lists</label>
+          <p>Comma-separated domains to never track</p>
+        </div>
+      </div>
+      <textarea id="opt-ignore-domains" class="text-area" rows="3"
+                placeholder="e.g. banking.example.com, myhealth.com"></textarea>
+
+      <div class="stat-row">
+        <span>💾 Storage used</span>
+        <span id="stat-storage" class="stat-val">Calculating…</span>
+      </div>
+      <div class="stat-row">
+        <span>🧠 Pages in memory</span>
+        <span id="stat-visits" class="stat-val">–</span>
+      </div>
+    </div>
+
+    <button class="btn-save" id="btn-save-general">Save Settings</button>
+  </section>
+
+  <!-- ── AI SETTINGS ────────────────────────────── -->
+  <section class="section" id="section-ai">
+    <h2>AI Settings</h2>
+
+    <div class="info-box">
+      <strong>🔑 Your API key is stored locally</strong> — it never leaves your browser.
+      MindVault uses the Anthropic Claude API to power smart summaries and natural-language search.
+    </div>
+
+    <div class="card">
+      <div class="card-title">Anthropic API Key</div>
+
+      <div class="field-col">
+        <label class="label-sm">API Key</label>
+        <div class="key-row">
+          <input type="password" id="opt-api-key"
+                 placeholder="sk-ant-api03-…" class="text-input" autocomplete="off">
+          <button class="btn-eye" id="btn-show-key">👁</button>
+        </div>
+        <p class="hint">
+          Get your free key at
+          <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a> →
+          API Keys → Create Key
+        </p>
+      </div>
+
+      <button class="btn-test" id="btn-test-key">🔌 Test Connection</button>
+      <div class="test-result" id="test-result"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">AI Features</div>
+
+      <div class="field-row">
+        <div class="field-info">
+          <label>Auto-Summarise Pages</label>
+          <p>Automatically generate AI summaries when visiting pages<br><em>Note: Uses API credits per page</em></p>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="opt-auto-summarise">
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="field-row">
+        <div class="field-info">
+          <label>AI Natural Language Search</label>
+          <p>Use Claude to power smart memory search</p>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="opt-ai-search" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="field-row">
+        <div class="field-info">
+          <label>Daily AI Insights</label>
+          <p>Generate a personalised productivity insight each day</p>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="opt-ai-insights" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <button class="btn-save" id="btn-save-ai">Save AI Settings</button>
+  </section>
+
+  <!-- ── PRIVACY ─────────────────────────────────── -->
+  <section class="section" id="section-privacy">
+    <h2>Privacy & Data</h2>
+
+    <div class="info-box warning">
+      ⚠️ All data is stored <strong>locally on your device</strong> using Chrome's storage API.
+      Nothing is sent to any server (except API calls to Anthropic if you use AI features).
+    </div>
+
+    <div class="card">
+      <div class="card-title">Data Management</div>
+
+      <div class="action-btns">
+        <button class="btn-action" id="btn-export-all">⬇️ Export All Data</button>
+        <button class="btn-action" id="btn-import-data">⬆️ Import Data</button>
+        <input type="file" id="import-file" accept=".json" style="display:none">
+      </div>
+
+      <div class="danger-zone">
+        <div class="danger-title">🗑️ Danger Zone</div>
+        <div class="danger-actions">
+          <div>
+            <button class="btn-danger" id="btn-clear-visits">Clear All History</button>
+            <p>Delete all saved pages and memories</p>
+          </div>
+          <div>
+            <button class="btn-danger" id="btn-clear-analytics">Clear Analytics</button>
+            <p>Delete all focus and time data</p>
+          </div>
+          <div>
+            <button class="btn-danger btn-danger-full" id="btn-reset-all">Reset Everything</button>
+            <p>Factory reset — deletes all data and settings</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SHORTCUTS ───────────────────────────────── -->
+  <section class="section" id="section-shortcuts">
+    <h2>Keyboard Shortcuts</h2>
+
+    <div class="card">
+      <div class="card-title">Configured Shortcuts</div>
+      <p class="hint" style="margin-bottom:16px">
+        To change shortcuts, visit <code>chrome://extensions/shortcuts</code>
+      </p>
+
+      <div class="shortcut-list">
+        <div class="shortcut-row">
+          <span>Open MindVault AI popup</span>
+          <kbd>Alt + Shift + M</kbd>
+        </div>
+        <div class="shortcut-row">
+          <span>Pin current page to memory</span>
+          <kbd>Alt + Shift + S</kbd>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">In-Popup Shortcuts</div>
+      <div class="shortcut-list">
+        <div class="shortcut-row"><span>Open search</span><kbd>Click 🔍</kbd></div>
+        <div class="shortcut-row"><span>Close modal</span><kbd>Click outside</kbd></div>
+        <div class="shortcut-row"><span>Close search</span><kbd>Esc</kbd></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── ABOUT ────────────────────────────────────── -->
+  <section class="section" id="section-about">
+    <h2>About MindVault AI</h2>
+
+    <div class="about-hero">
+      <div class="about-icon">🧠</div>
+      <h3>MindVault AI</h3>
+      <p>Version 1.0.0</p>
+      <p class="about-desc">
+        Your AI-powered browsing memory assistant. Remember everything you browse,
+        understand your focus patterns, and use natural language to search your history.
+      </p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Tech Stack</div>
+      <ul class="tech-list">
+        <li>🧩 Chrome Extension Manifest V3</li>
+        <li>✨ Anthropic Claude AI (claude-sonnet-4)</li>
+        <li>📊 Chart.js for visualisations</li>
+        <li>💾 Chrome Storage API (local)</li>
+        <li>🔔 Chrome Notifications API</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Links</div>
+      <div class="link-list">
+        <a href="https://github.com" target="_blank">📂 GitHub Repository</a>
+        <a href="https://console.anthropic.com" target="_blank">🔑 Anthropic Console</a>
+        <a href="https://chromewebstore.google.com" target="_blank">🏪 Chrome Web Store</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ── Toast ────────────────────────────────────────────────────── -->
+<div class="toast" id="toast"></div>
+
+<script src="options.js"></script>
+</body>
+</html>
